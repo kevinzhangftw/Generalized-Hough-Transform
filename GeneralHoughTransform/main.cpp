@@ -46,7 +46,8 @@ int main(int argc, const char * argv[]) {
     
     Mat src = imread("animals.jpg", CV_LOAD_IMAGE_COLOR);
     namedWindow( "Animals gone BEASTTT!!!", WINDOW_AUTOSIZE );
-    imshow("source", src);
+    imshow("Animals gone BEASTTT!!!", src);
+    waitKey(0);
     
     return 0;
 }
