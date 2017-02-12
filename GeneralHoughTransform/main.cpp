@@ -43,7 +43,10 @@ int main(int argc, const char * argv[]) {
     cout<< "CV_VERSION: " << CV_VERSION << endl;
     char * dir = getcwd(NULL, 0); // Platform-dependent, see reference link below
     printf("Current dir: %s", dir);
-
-    std::cout << "Hello, World!\n";
+    
+    Mat src = imread("animals.jpg", CV_LOAD_IMAGE_COLOR);
+    namedWindow( "Animals gone BEASTTT!!!", WINDOW_AUTOSIZE );
+    imshow("source", src);
+    
     return 0;
 }
