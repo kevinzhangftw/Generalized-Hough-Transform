@@ -115,7 +115,7 @@ public:
     
     // save file with canny edge of the original image
     void createTemplate(){
-        Mat input_img = imread("files\\template_original.jpg", 1);
+        Mat input_img = imread("template_bear.png", 1);
         Mat src_gray;
         Mat detected_edges;
         src_gray.create( Size(input_img.cols, input_img.rows), CV_8UC1);
@@ -298,12 +298,12 @@ private:
     // load vector pts with all points from the contour
     void readPoints(){
         // read original template image and its worked-out contour
-        Mat original_img = imread("files\\template_original.jpg", 1);
+        Mat original_img = imread("template_bear.png", 1);
         Mat input_img_gray;
         input_img_gray.create( Size(original_img.cols, original_img.rows), CV_8UC1);
         cvtColor(original_img, input_img_gray, CV_BGR2GRAY);
         //Mat template_img = imread("files\\contour_def.bmp", 1);
-        Mat template_img = imread("files\\contour_def2.bmp", 1);
+        Mat template_img = imread("files\contour_rough.bmp", 1);
         // find reference point inside contour image and save it in variable refPoint
         int nl= template_img.rows;
         int nc= template_img.cols;
