@@ -280,6 +280,7 @@ public:
                 imshow("input_img", input_img2);
             }
             else{
+
                 imshow("input_img", showimage);
             }
             alt = !alt;
@@ -295,37 +296,43 @@ public:
     
 private:
     
-    // load vector pts with all points from the contour
-    void readPoints(){
-        // read original template image and its worked-out contour
-        Mat original_img = imread("template_bear.png", 1);
+    Mat getInputImgGray(Mat original_img){
         Mat input_img_gray;
         input_img_gray.create( Size(original_img.cols, original_img.rows), CV_8UC1);
         cvtColor(original_img, input_img_gray, CV_BGR2GRAY);
-        //Mat template_img = imread("files\\contour_def.bmp", 1);
+        return input_img_gray;
+    }
+    
+    Vec2i getRefPoint(int nl, int nc){
         Mat template_img = imread("files\contour_rough.bmp", 1);
+        Vec2i referencePoint;
         // find reference point inside contour image and save it in variable refPoint
-        int nl= template_img.rows;
-        int nc= template_img.cols;
         for (int j=0; j<nl; ++j) {
             Vec3b* data= (Vec3b*)(template_img.data + template_img.step.p[0]*j);
             for (int i=0; i<nc; ++i) {
                 if ( data[i]==Vec3b(127,127,127)  ){
-                    refPoint = Vec2i(i,j);
+                    referencePoint = Vec2i(i,j);
                 }
             }
         }
-        // get Scharr matrices from original template image to obtain contour gradients
+        return referencePoint;
+    }
+    
+    Mat getDx(Mat input_img_gray, Mat original_img){
         Mat dx;
         dx.create( Size(original_img.cols, original_img.rows), CV_16SC1);
         Sobel(input_img_gray, dx, CV_16S, 1, 0, CV_SCHARR);
+        return dx;
+    }
+    
+    Mat getDy(Mat input_img_gray, Mat original_img){
         Mat dy;
         dy.create( Size(original_img.cols, original_img.rows), CV_16SC1);
         Sobel(input_img_gray, dy, CV_16S, 0, 1, CV_SCHARR);
-        // load points on vector
-        pts.clear();
-        int mindx = INT_MAX;
-        int maxdx = INT_MIN;
+        return dy;
+    }
+    
+    void buildRtable(int nl, int nc, int mindx, int maxdx, Mat dx, Mat dy, Mat template_img){
         for (int j=0; j<nl; ++j) {
             Vec3b* data= (Vec3b*)(template_img.data + template_img.step.p[0]*j);
             for (int i=0; i<nc; ++i) {
@@ -348,6 +355,30 @@ private:
                 }
             }
         }
+    }
+    
+    // load vector pts with all points from the contour
+    void readPoints(){
+        // read original template image and its worked-out contour
+        Mat original_img = imread("template_bear.png", 1);
+        Mat input_img_gray = getInputImgGray(original_img);
+        //Mat template_img = imread("files\\contour_def.bmp", 1);
+        Mat template_img = imread("files\contour_rough.bmp", 1);
+        // find reference point inside contour image and save it in variable refPoint
+        int nl= template_img.rows;
+        int nc= template_img.cols;
+        
+        refPoint = getRefPoint(nl,nc);
+        
+        // get Scharr matrices from original template image to obtain contour gradients
+        Mat dx = getDx(input_img_gray, original_img);
+        Mat dy = getDy(input_img_gray, original_img);
+        
+        // load points on vector
+        pts.clear();
+        int mindx = INT_MAX;
+        int maxdx = INT_MIN;
+        buildRtable(nl, nc, mindx, maxdx, dx, dy, template_img);
         // maximum width of the contour
         wtemplate = maxdx-mindx+1;
     }
