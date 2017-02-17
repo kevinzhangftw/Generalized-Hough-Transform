@@ -15,6 +15,7 @@
 #include <iostream>
 #include <unistd.h>
 #include "GHT.cpp"
+#include "ObjectDetection.hpp"
 
 using namespace cv;
 using namespace std;
@@ -25,8 +26,7 @@ void runGHT(char c){
     if (c == 't'){
         GenHoughTrnf ght;
         ght.createTemplate();
-    }
-    else if (c == 'r'){
+    } else if (c == 'r'){
         GenHoughTrnf ght;
         //ght.setTresholds(180, 250);
         ght.createRtable();
@@ -39,16 +39,13 @@ void runGHT(char c){
 }
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-//    cout<< "CV_VERSION: " << CV_VERSION << endl;
-//    char * dir = getcwd(NULL, 0); // Platform-dependent, see reference link below
-//    printf("Current dir: %s", dir);
-//    
-//    Mat src = imread("animals.jpg", CV_LOAD_IMAGE_COLOR);
-//    imshow("Animals gone BEASTTT!!!", src);
-//    waitKey(0);
-    runGHT('t');
-    
-    runGHT('r');
+//    runGHT('t');
+    ObjectDetection detector = ObjectDetection();
+    Mat detectedBear = detector.detect("animals", "bear");
+    imshow("detectedBear", detectedBear);
+    waitKey(0);
+//    Mat detectedElephant = detector.detect("animals", "elephant");
+//    Mat detectedK = detector.detect("letters", "K");
+//    Mat detectedQ = detector.detect("letters", "Q");
     return 0;
 }

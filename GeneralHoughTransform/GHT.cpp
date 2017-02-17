@@ -59,7 +59,7 @@ private:
     // minimum and maximum rotation allowed for template
     float phimin;
     float phimax;
-    // dimension in pixels of squares in image
+    // dimension in pixels of squares in imagete
     int rangeXY;
     // interval to increase scale
     int rangeS;
@@ -131,25 +131,24 @@ public:
         readRtable();
     }
     
+    Mat getDetectedEdges(Mat src_gray){
+        Mat detected_edges;
+        blur( src_gray, detected_edges, Size(3,3) );
+        Canny( detected_edges, detected_edges, thr1, thr2, 3 );
+        return detected_edges;
+    }
+    
     // fill accumulator matrix
     void accumulate(cv::Mat& input_img){
         showimage = input_img;
         // transform image to grayscale:
-        Mat src_gray;
-        src_gray.create( Size(input_img.cols, input_img.rows), CV_8UC1);
-        cvtColor(input_img, src_gray, CV_BGR2GRAY);
+        Mat src_gray = getInputImgGray(input_img);
         // reduce noise with a kernel 3x3 and get cannyedge image:
-        Mat detected_edges;
-        blur( src_gray, detected_edges, Size(3,3) );
-        Canny( detected_edges, detected_edges, thr1, thr2, 3 );
+        Mat detected_edges = getDetectedEdges(src_gray);
         //imshow("detected_edges", detected_edges);
         // get Scharr matrices from image to obtain contour gradients
-        Mat dx;
-        dx.create( Size(input_img.cols, input_img.rows), CV_16SC1);
-        Sobel(src_gray, dx, CV_16S, 1, 0, CV_SCHARR);
-        Mat dy;
-        dy.create( Size(input_img.cols, input_img.rows), CV_16SC1);
-        Sobel(src_gray, dy, CV_16S, 0, 1, CV_SCHARR);
+        Mat dx = getDx(src_gray);
+        Mat dy = getDy(src_gray);
         // load all points from image all image contours on vector pts2
         int nl= detected_edges.rows;
         int nc= detected_edges.cols;
@@ -168,8 +167,8 @@ public:
                     Rpoint2 rpt;
                     rpt.x = i*inv_rangeXY;
                     rpt.y = j*inv_rangeXY;
-                    float a = atan2((float)vy, (float)vx);              //	gradient angle in radians
-                    float phi = ((a > 0) ? a-pi_half : a+pi_half);      // contour angle with respect to x axis
+                    float a = atan2((float)vy, (float)vx);           //	gradient angle in radians
+                    float phi = ((a > 0) ? a-pi_half : a+pi_half); // contour angle with respect to x axis
                     int angleindex = (int)((phi+pi*0.5f)*inv_deltaphi); // index associated with angle (0 index = -90 degrees)
                     if (angleindex == intervals) angleindex=intervals-1;// -90∞angle and +90∞ has same effect
                     rpt.phiindex = angleindex;
@@ -318,17 +317,17 @@ private:
         return referencePoint;
     }
     
-    Mat getDx(Mat input_img_gray, Mat original_img){
+    Mat getDx(Mat grayImage){
         Mat dx;
-        dx.create( Size(original_img.cols, original_img.rows), CV_16SC1);
-        Sobel(input_img_gray, dx, CV_16S, 1, 0, CV_SCHARR);
+        dx.create( Size(grayImage.cols, grayImage.rows), CV_16SC1);
+        Sobel(grayImage, dx, CV_16S, 1, 0, CV_SCHARR);
         return dx;
     }
     
-    Mat getDy(Mat input_img_gray, Mat original_img){
+    Mat getDy(Mat grayImage){
         Mat dy;
-        dy.create( Size(original_img.cols, original_img.rows), CV_16SC1);
-        Sobel(input_img_gray, dy, CV_16S, 0, 1, CV_SCHARR);
+        dy.create( Size(grayImage.cols, grayImage.rows), CV_16SC1);
+        Sobel(grayImage, dy, CV_16S, 0, 1, CV_SCHARR);
         return dy;
     }
     
@@ -371,8 +370,8 @@ private:
         refPoint = getRefPoint(nl,nc);
         
         // get Scharr matrices from original template image to obtain contour gradients
-        Mat dx = getDx(input_img_gray, original_img);
-        Mat dy = getDy(input_img_gray, original_img);
+        Mat dx = getDx(input_img_gray);
+        Mat dy = getDy(input_img_gray);
         
         // load points on vector
         pts.clear();
@@ -383,12 +382,21 @@ private:
         wtemplate = maxdx-mindx+1;
     }
     
-    // create Rtable from contour points
-    void readRtable(){
+    void initRtable(int intervals){
         Rtable.clear();
         Rtable.resize(intervals);
+    }
+    
+    float setRange(int intervals){
+        float range;
+        return range = pi/intervals;
+    }
+    
+    // create Rtable from contour points
+    void readRtable(){
+        initRtable(intervals);
         // put points in the right interval, according to discretized angle and range size
-        float range = pi/intervals;
+        float range = setRange(intervals);
         for (vector<Rpoint>::size_type t = 0; t < pts.size(); ++t){
             int angleindex = (int)((pts[t].phi+pi/2)/range);
             if (angleindex == intervals) angleindex=intervals-1;

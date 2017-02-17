@@ -11,4 +11,16 @@
 
 #include <stdio.h>
 
+struct Rpoint{
+    int dx;
+    int dy;
+    float phi;
+};
+
+struct Rpoint2{
+    float x;
+    float y;
+    int phiindex;
+};
+
 #endif /* GHT_hpp */

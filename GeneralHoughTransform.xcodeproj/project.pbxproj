@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2A2CD2E21E4EBB6600F666B2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A2CD2E11E4EBB6600F666B2 /* main.cpp */; };
 		2A2CD2EC1E4FEAD700F666B2 /* GHT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A2CD2EA1E4FEAD700F666B2 /* GHT.cpp */; };
+		2A3475CE1E5785A40046E81F /* ObjectDetection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A3475CC1E5785A40046E81F /* ObjectDetection.cpp */; };
+		2A3475D11E57916C0046E81F /* TableGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A3475CF1E57916C0046E81F /* TableGenerator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +30,10 @@
 		2A2CD2E11E4EBB6600F666B2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2A2CD2EA1E4FEAD700F666B2 /* GHT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GHT.cpp; sourceTree = "<group>"; };
 		2A2CD2EB1E4FEAD700F666B2 /* GHT.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GHT.hpp; sourceTree = "<group>"; };
+		2A3475CC1E5785A40046E81F /* ObjectDetection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectDetection.cpp; sourceTree = "<group>"; };
+		2A3475CD1E5785A40046E81F /* ObjectDetection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjectDetection.hpp; sourceTree = "<group>"; };
+		2A3475CF1E57916C0046E81F /* TableGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableGenerator.cpp; sourceTree = "<group>"; };
+		2A3475D01E57916C0046E81F /* TableGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TableGenerator.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +67,10 @@
 			isa = PBXGroup;
 			children = (
 				2A2CD2E11E4EBB6600F666B2 /* main.cpp */,
+				2A3475CC1E5785A40046E81F /* ObjectDetection.cpp */,
+				2A3475CD1E5785A40046E81F /* ObjectDetection.hpp */,
+				2A3475CF1E57916C0046E81F /* TableGenerator.cpp */,
+				2A3475D01E57916C0046E81F /* TableGenerator.hpp */,
 				2A2CD2EA1E4FEAD700F666B2 /* GHT.cpp */,
 				2A2CD2EB1E4FEAD700F666B2 /* GHT.hpp */,
 			);
@@ -124,7 +134,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A3475CE1E5785A40046E81F /* ObjectDetection.cpp in Sources */,
 				2A2CD2E21E4EBB6600F666B2 /* main.cpp in Sources */,
+				2A3475D11E57916C0046E81F /* TableGenerator.cpp in Sources */,
 				2A2CD2EC1E4FEAD700F666B2 /* GHT.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -298,6 +310,7 @@
 				2A2CD2E71E4EBB6600F666B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

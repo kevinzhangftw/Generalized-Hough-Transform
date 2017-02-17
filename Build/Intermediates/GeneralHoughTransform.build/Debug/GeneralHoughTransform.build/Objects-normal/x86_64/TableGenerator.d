@@ -1,5 +1,6 @@
 dependencies: \
-  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/main.cpp \
+  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/TableGenerator.cpp \
+  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/TableGenerator.hpp \
   /usr/local/include/opencv2/highgui/highgui.hpp \
   /usr/local/include/opencv2/highgui.hpp \
   /usr/local/include/opencv2/core.hpp \
@@ -35,7 +36,4 @@ dependencies: \
   /usr/local/include/opencv2/imgcodecs/imgcodecs_c.h \
   /usr/local/include/opencv2/videoio/videoio_c.h \
   /usr/local/include/opencv2/imgproc/imgproc.hpp \
-  /usr/local/include/opencv2/imgproc.hpp \
-  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/GHT.cpp \
-  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/ObjectDetection.hpp \
-  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/TableGenerator.hpp
+  /usr/local/include/opencv2/imgproc.hpp
