@@ -19,29 +19,40 @@
 using namespace cv;
 
 typedef std::vector<std::vector<Vec2i>> Rtable;
-
+typedef unsigned char uchar;
 
 struct Rpoint3{
-    float dx;
-    float dy;
-    int phi;
+    uchar dx;
+    uchar dy;
+    float phi;
 };
 
 class TableGenerator {
     int rowCount;//= template_img.rows;
     int columnCount;//= template_img.cols;
+    int matType;
+    Mat grayImage;
+    Mat detectEdges(Mat source);
+    Mat edgeImage;
+    void setReferencePoint();
+    Vec2i referencePoint;
+    Mat dx;
+    Mat dy;
+    void setXContour();
+    void setYContour();
+    void buildRPoints();
+    std::vector<Rpoint3> points;
+    void allotPoints();
+    void inspectTable(Rtable table);
+    ////////
+    String type2str(int type);
     
-    //
-    Vec2i getRefPoint(Mat template_img);
     void initRtable(int intervals);
     void readRtable();
-    void readPoints(Mat edgeImage, Mat grayImage);
     int intervals;
-    Vec2i refPoint;
     Rtable table;
     float setRange(int intervals);
     const float pi = 3.14159265f;
-    std::vector<Rpoint3> pts;
     // width of template contour
     int wtemplate;
     // minimum and maximum width of scaled contour
@@ -54,11 +65,9 @@ class TableGenerator {
     int rangeXY;
     // interval to increase scale
     int rangeS;
-    Mat getDx(Mat grayImage);
-    Mat getDy(Mat grayImage);
-    void buildRtable(int nl, int nc, int mindx, int maxdx, Mat dx, Mat dy, Mat template_img);
-    Mat detectEdges(Mat source);
+    void debugPrint(Mat matrix);
 public:
+    void inspect(Mat image);
     Rtable generate(Mat grayImage);
 };
 

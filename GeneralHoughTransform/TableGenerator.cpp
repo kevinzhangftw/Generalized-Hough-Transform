@@ -19,6 +19,35 @@
 
 using namespace std;
 
+void TableGenerator::inspect(Mat image) {
+    debugPrint(image);
+    imshow("inspecting", image);
+    waitKey(0);
+}
+
+String TableGenerator::type2str(int type) {
+    String r;
+    
+    uchar depth = type & CV_MAT_DEPTH_MASK;
+    uchar chans = 1 + (type >> CV_CN_SHIFT);
+    
+    switch ( depth ) {
+        case CV_8U:  r = "8U"; break;
+        case CV_8S:  r = "8S"; break;
+        case CV_16U: r = "16U"; break;
+        case CV_16S: r = "16S"; break;
+        case CV_32S: r = "32S"; break;
+        case CV_32F: r = "32F"; break;
+        case CV_64F: r = "64F"; break;
+        default:     r = "User"; break;
+    }
+    
+    r += "C";
+    r += (chans+'0');
+    
+    return r;
+}
+
 void TableGenerator::initRtable(int intervals){
     table.clear();
     table.resize(intervals);
@@ -30,78 +59,71 @@ float TableGenerator::setRange(int intervals) {
     return range = pi/intervals;
 }
 
-
-Vec2i TableGenerator::getRefPoint(Mat template_img){
-//    Mat template_img = imread("files\contour_rough.bmp", 1);
-    Vec2i referencePoint;
-    // find reference point inside contour image and save it in variable refPoint
-    for (int j=0; j<rowCount; ++j) {
-        Vec3b* data= (Vec3b*)(template_img.data + template_img.step.p[0]*j);
-        for (int i=0; i<columnCount; ++i) {
-            if ( data[i]==Vec3b(127,127,127)  ){
-                referencePoint = Vec2i(i,j);
-            }
-        }
-    }
-    return referencePoint;
+void TableGenerator::setReferencePoint(){
+    referencePoint[0] = rowCount/2;
+    referencePoint[1] = columnCount/2;
 }
 
-void TableGenerator::buildRtable(int nl, int nc, int mindx, int maxdx, Mat dx, Mat dy, Mat template_img){
-    for (int j=0; j<nl; ++j) {
-        Vec3b* data= (Vec3b*)(template_img.data + template_img.step.p[0]*j);
-        for (int i=0; i<nc; ++i) {
-            if ( data[i]==Vec3b(255,255,255)  )
-            {
-                short vx = dx.at<short>(j,i);
-                short vy = dy.at<short>(j,i);
-                Rpoint3 rpt;
-                //float mag = std::sqrt( float(vx*vx+vy*vy) );
-                rpt.dx = refPoint(0)-i;
-                rpt.dy = refPoint(1)-j;
-                float a = atan2((float)vy, (float)vx); //radians
-                rpt.phi = ((a > 0) ? a-pi/2 : a+pi/2);
-                //float a = atan2((float)vy, (float)vx) * 180/3.14159265358979f; //degrees
-                //rpt.phi = ((a > 0) ? a-90 : a+90);
-                // update further right and left dx
-                if (rpt.dx < mindx) mindx=rpt.dx;
-                if (rpt.dx > maxdx) maxdx=rpt.dx;
-                pts.push_back( rpt );
-            }
-        }
-    }
-}
-
-void TableGenerator::readPoints(Mat edgeImage, Mat grayImage){
-    Mat template_img = edgeImage;
-    // find reference point inside contour image and save it in variable refPoint
-    
-    
-    // get Scharr matrices from original template image to obtain contour gradients
-    Mat dx = getDx(grayImage);
-    Mat dy = getDy(grayImage);
-    
-    // load points on vector
-    pts.clear();
+void TableGenerator::buildRPoints(){
     int mindx = INT_MAX;
     int maxdx = INT_MIN;
-    buildRtable(rowCount, columnCount, mindx, maxdx, dx, dy, template_img);
-    // maximum width of the contour
+    points.clear();
+
+    Mat inspectionMat = Mat::zeros(edgeImage.rows, edgeImage.cols, CV_32F);
+    
+    inspect(dx);
+    for (int i=0; i<rowCount; ++i) {
+        float * xRow = dx.ptr<float>(i);
+        for (int j=0; j<columnCount; ++j) {
+        if ( edgeImage.at<uchar>(i, j) == 255  ) {
+
+            float vx = dx.at<float>(i,j);
+            float vy = dy.at<float>(i,j);
+            Rpoint3 entry;
+            //float mag = std::sqrt( float(vx*vx+vy*vy) );
+            entry.dx = referencePoint(0)-j;
+            entry.dy = referencePoint(1)-i;
+            
+            inspectionMat.at<float>(i, j) = xRow[j];
+            
+            /*
+             const float theta = fastAtan2(dyRow[x], dxRow[x]);
+             const int n = cvRound(theta * thetaScale);
+             r_table_[n].push_back(p - templCenter_);
+             */
+            
+            float theta = fastAtan2(vy, vx);
+            float a = atan2((float)vy, (float)vx); //radians
+            entry.phi = ((a > 0) ? a-pi/2 : a+pi/2);
+            //float a = atan2((float)vy, (float)vx) * 180/3.14159265358979f; //degrees
+            //rpt.phi = ((a > 0) ? a-90 : a+90);
+            // update further right and left dx
+            if (entry.dx < mindx) mindx=entry.dx;
+            if (entry.dx > maxdx) maxdx=entry.dx;
+            points.push_back( entry );
+//            inspectionMat.at<uchar>(i, j) = 255;
+            inspectionMat.at<float>(i, j) = entry.phi;
+        }
+    }}
+    inspect(inspectionMat);
     wtemplate = maxdx-mindx+1;
 }
 
-
-Mat TableGenerator::getDx(Mat grayImage){
-    Mat dx;
-    dx.create( Size(grayImage.cols, grayImage.rows), CV_16SC1);
-    Sobel(grayImage, dx, CV_16S, 1, 0, CV_SCHARR);
-    return dx;
+void TableGenerator::debugPrint(Mat matrix) {
+    cout << "size: " << matrix.size << endl;
+    cout << matrix << endl;
 }
 
-Mat TableGenerator::getDy(Mat grayImage){
-    Mat dy;
-    dy.create( Size(grayImage.cols, grayImage.rows), CV_16SC1);
-    Sobel(grayImage, dy, CV_16S, 0, 1, CV_SCHARR);
-    return dy;
+void TableGenerator::setXContour(){
+    dx.create( Size(columnCount, rowCount), CV_32F);
+    Sobel(edgeImage, dx, CV_32F, 1, 0, CV_SCHARR);
+}
+
+void TableGenerator::setYContour(){
+    dy.create( Size(columnCount, rowCount), CV_32F);
+    Sobel(edgeImage, dy, CV_32F, 0, 1, CV_SCHARR);
+//    debugPrint(dy);
+//    inspect(dy);
 }
 
 
@@ -113,27 +135,52 @@ Mat TableGenerator::detectEdges(Mat source) {
     return edgeMat;
 }
 
-
-// create Rtable from contour points
-void TableGenerator::readRtable() {
-    initRtable(intervals);
+void TableGenerator::allotPoints() {
     // put points in the right interval, according to discretized angle and range size
     float range = setRange(intervals);
-    for (vector<Rpoint3>::size_type t = 0; t < pts.size(); ++t){
-        int angleindex = (int)((pts[t].phi+pi/2)/range);
+    for (int t = 0; t < points.size(); ++t){
+        int angleindex = (int)((points[t].phi+pi/2)/range);
         if (angleindex == intervals) angleindex=intervals-1;
-//        Rtable[angleindex].push_back( Vec2i(pts[t].dx, pts[t].dy) );
+        table[angleindex].push_back( Vec2i(points[t].dx, points[t].dy) );
     }
 }
 
+void TableGenerator::inspectTable(Rtable table) {
+    for (int i = 0; i < table.size(); i++) {
+        cout << "interval " << i << ":" << endl;
+        std::vector<Vec2i> entries = table[i];
+        for (int j = 0; j < entries.size(); j++) {
+            cout << "dx: " << entries[j](0) << " ";
+            cout << "dy: " << entries[j](1) << endl;
+        }
+    }
+    cout << "end interval" << endl;
+}
 
 Rtable TableGenerator::generate(Mat grayImage) {
+    this->grayImage = grayImage;
+    matType = grayImage.type();
     rowCount = grayImage.rows;
     columnCount = grayImage.cols;
-    Mat edgeImage = detectEdges(grayImage);
-    //TODO: getRefPoint
-    refPoint = getRefPoint(edgeImage);
+    edgeImage = detectEdges(grayImage);
+
+    // for each edge point, record its angle relative to reference
+    setReferencePoint();
+    setXContour();
+    setYContour();
+    buildRPoints();
     
+//    inspect(dx);
+//    inspect(dy);
+    
+    // put into buckets
+    intervals = 16;
+    initRtable(intervals);
+    allotPoints();
+    
+    inspectTable(table);
+    // load points on vector
+
     
     return Rtable();
 }

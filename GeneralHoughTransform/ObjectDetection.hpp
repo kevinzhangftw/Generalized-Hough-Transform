@@ -22,8 +22,7 @@ using namespace cv;
 
 class ObjectDetection {
     
-    Mat edgesOf(String object);
-    Mat detectEdges(Mat source);
+    Mat grayScaleOf(String object);
 public:
     Mat detect(String, String);
     

@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include "GHT.cpp"
 #include "ObjectDetection.hpp"
+#include "MatrixAccess.hpp"
 
 using namespace cv;
 using namespace std;
@@ -40,10 +41,16 @@ void runGHT(char c){
 
 int main(int argc, const char * argv[]) {
 //    runGHT('t');
-    ObjectDetection detector = ObjectDetection();
-    Mat detectedBear = detector.detect("animals", "bear");
-    imshow("detectedBear", detectedBear);
-    waitKey(0);
+    
+    //real thing
+//    ObjectDetection detector = ObjectDetection();
+//    Mat detectedBear = detector.detect("animals", "block");
+//    imshow("block", detectedBear);
+//    waitKey(0);
+    //
+    MatrixAccess MatrixAccess;
+    MatrixAccess.access("template_bear.png");
+    
 //    Mat detectedElephant = detector.detect("animals", "elephant");
 //    Mat detectedK = detector.detect("letters", "K");
 //    Mat detectedQ = detector.detect("letters", "Q");
