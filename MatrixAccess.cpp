@@ -7,24 +7,24 @@
 //
 
 #include "MatrixAccess.hpp"
-#define CV_8U   0
-#define CV_8S   1
-#define CV_16U  2
-#define CV_16S  3
-#define CV_32S  4
-#define CV_32F  5
-#define CV_64F  6
-#define CV_USRTYPE1 7
 
 
-void MatrixAccess::access(String source) {
-    cout << "image accessed:" << source << endl;
-    Mat matrix = imread(source, CV_RGB2GRAY);
-    
-    int pixel = (int)matrix.at<uchar>(10,10);
-    cout << "pixel output at 10,10 is:" << pixel << endl;
+void MatrixAccess::access(Mat matrix, int i, int j) {
+    int pixel = (int)matrix.at<uchar>(i,j);
+    cout << "pixel output at "<<i<<", "<<j<<" is:" << pixel << endl;
 }
 
-void MatrixAccess::copy(Mat original){
-    
+Mat MatrixAccess::copy(Mat original){
+    Mat matrixCopy;
+    matrixCopy.create( Size(original.cols, original.rows), CV_8UC3);
+    cv::Size matrixCopySize = matrixCopy.size();
+    int row = matrixCopySize.height;
+    int col = matrixCopySize.width;
+    cout << "row and col of copy is :" << row << " " << col << endl;
+    for (int i =0 ; i<row; i++) {
+        for (int j=0; j<col; j++) {
+            matrixCopy.at<uchar>(i,j) = original.at<uchar>(i,j);
+        }
+    }
+    return matrixCopy;
 }

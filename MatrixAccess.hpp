@@ -24,8 +24,8 @@ using namespace std;
 class MatrixAccess {
     
 public:
-    void access(String);
-    void copy(Mat);
+    void access(Mat, int, int);
+    Mat copy(Mat);
     
 };
 

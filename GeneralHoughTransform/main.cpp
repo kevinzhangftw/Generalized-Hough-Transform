@@ -49,7 +49,9 @@ int main(int argc, const char * argv[]) {
 //    waitKey(0);
     //
     MatrixAccess MatrixAccess;
-    MatrixAccess.access("template_bear.png");
+    Mat original = imread("template_bear.png", CV_RGB2GRAY);
+    Mat copyOfOriginal =  MatrixAccess.copy(original);
+    MatrixAccess.access(copyOfOriginal, 10, 10);
     
 //    Mat detectedElephant = detector.detect("animals", "elephant");
 //    Mat detectedK = detector.detect("letters", "K");
