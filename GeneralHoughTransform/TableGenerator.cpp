@@ -15,13 +15,32 @@
 #include <string>
 #include <iostream>
 #include <unistd.h>
-
+#include "MatrixAccess.hpp"
 
 using namespace std;
 
 void TableGenerator::inspect(Mat image) {
-    debugPrint(image);
+//    debugPrint(image);
+    normalize(image, image, 0, 1, NORM_MINMAX, CV_32F);
     imshow("inspecting", image);
+    cout << "Mat Type:" << image.type() << endl;
+    imwrite( "../output/inspection.jpg", image );
+    waitKey(0);
+}
+
+void TableGenerator::inspectGray(Mat image) {
+    debugPrint(image);
+    Mat grayCopy = Mat::zeros(image.size(), CV_32F);
+    double min, max;
+    cv::minMaxLoc(image, &min, &max);
+    float range = max - min;
+    for (int i = 0; i < image.cols; i++) {
+        for (int j = 0; j < image.rows; j++) {
+            grayCopy.at<float>(i, j) = (image.at<float>(i,j) - (float) min) / (float) range;
+        }
+    }
+    debugPrint(grayCopy);
+    imshow("inspecting grayCopy", grayCopy);
     waitKey(0);
 }
 
@@ -53,6 +72,11 @@ void TableGenerator::initRtable(int intervals){
     table.resize(intervals);
 }
 
+void TableGenerator::normFloat(Mat &mat) {
+    normalize(mat, mat, 0, 1, NORM_MINMAX, CV_32F);
+
+}
+
 
 float TableGenerator::setRange(int intervals) {
     float range;
@@ -69,22 +93,18 @@ void TableGenerator::buildRPoints(){
     int maxdx = INT_MIN;
     points.clear();
 
-    Mat inspectionMat = Mat::zeros(edgeImage.rows, edgeImage.cols, CV_32F);
-    
-    inspect(dx);
-    for (int i=0; i<rowCount; ++i) {
-        float * xRow = dx.ptr<float>(i);
-        for (int j=0; j<columnCount; ++j) {
-        if ( edgeImage.at<uchar>(i, j) == 255  ) {
-
-            float vx = dx.at<float>(i,j);
-            float vy = dy.at<float>(i,j);
+//    inspect(edgeImage); 
+    Mat inspectionMat;
+    inspectionMat.create( edgeImage.size(), CV_32F);
+    for (int i=0; i<dx.cols-1; ++i) {
+        for (int j=0; j<dx.rows-1; ++j) {
+        if ( edgeImage.at<uchar>(j,i) == 255  ) {
+            float vx = dx.at<float>(j,i);
+            float vy = dy.at<float>(j,i);
             Rpoint3 entry;
             //float mag = std::sqrt( float(vx*vx+vy*vy) );
-            entry.dx = referencePoint(0)-j;
-            entry.dy = referencePoint(1)-i;
-            
-            inspectionMat.at<float>(i, j) = xRow[j];
+            entry.dy = i - referencePoint(1);
+            entry.dx = j - referencePoint(0);
             
             /*
              const float theta = fastAtan2(dyRow[x], dxRow[x]);
@@ -92,19 +112,23 @@ void TableGenerator::buildRPoints(){
              r_table_[n].push_back(p - templCenter_);
              */
             
-            float theta = fastAtan2(vy, vx);
-            float a = atan2((float)vy, (float)vx); //radians
-            entry.phi = ((a > 0) ? a-pi/2 : a+pi/2);
-            //float a = atan2((float)vy, (float)vx) * 180/3.14159265358979f; //degrees
-            //rpt.phi = ((a > 0) ? a-90 : a+90);
+            
             // update further right and left dx
             if (entry.dx < mindx) mindx=entry.dx;
             if (entry.dx > maxdx) maxdx=entry.dx;
             points.push_back( entry );
-//            inspectionMat.at<uchar>(i, j) = 255;
-            inspectionMat.at<float>(i, j) = entry.phi;
+            const float theta = fmod(fastAtan2(vy, vx), 360);
+            const float thetaScale = 360.0 / intervals;
+            const int n = cvRound(theta / thetaScale) % intervals;
+            cout << "vx: " << vx << ", vy: " << vy << endl;
+            cout << "theta: " << theta << ", n: " << n << endl;
+            table[n].push_back( Vec2i(entry.dx, entry.dy) );
+           inspectionMat.at<float>(j, i) = theta;
         }
+            
+
     }}
+    
     inspect(inspectionMat);
     wtemplate = maxdx-mindx+1;
 }
@@ -116,14 +140,13 @@ void TableGenerator::debugPrint(Mat matrix) {
 
 void TableGenerator::setXContour(){
     dx.create( Size(columnCount, rowCount), CV_32F);
-    Sobel(edgeImage, dx, CV_32F, 1, 0, CV_SCHARR);
+    Sobel(grayImage, dx, CV_32F, 1, 0, CV_SCHARR);
+    
 }
 
 void TableGenerator::setYContour(){
     dy.create( Size(columnCount, rowCount), CV_32F);
-    Sobel(edgeImage, dy, CV_32F, 0, 1, CV_SCHARR);
-//    debugPrint(dy);
-//    inspect(dy);
+    Sobel(grayImage, dy, CV_32F, 0, 1, CV_SCHARR);
 }
 
 
@@ -136,11 +159,13 @@ Mat TableGenerator::detectEdges(Mat source) {
 }
 
 void TableGenerator::allotPoints() {
+    // r_table_[n].push_back
     // put points in the right interval, according to discretized angle and range size
     float range = setRange(intervals);
     for (int t = 0; t < points.size(); ++t){
         int angleindex = (int)((points[t].phi+pi/2)/range);
         if (angleindex == intervals) angleindex=intervals-1;
+        
         table[angleindex].push_back( Vec2i(points[t].dx, points[t].dy) );
     }
 }
@@ -150,33 +175,30 @@ void TableGenerator::inspectTable(Rtable table) {
         cout << "interval " << i << ":" << endl;
         std::vector<Vec2i> entries = table[i];
         for (int j = 0; j < entries.size(); j++) {
-            cout << "dx: " << entries[j](0) << " ";
-            cout << "dy: " << entries[j](1) << endl;
+            cout << "(" << entries[j](0) << " ";
+            cout << entries[j](1) << ")" << ", ";
         }
+        cout << endl;
     }
-    cout << "end interval" << endl;
+    cout << "end intervals" << endl;
 }
 
-Rtable TableGenerator::generate(Mat grayImage) {
-    this->grayImage = grayImage;
-    matType = grayImage.type();
+Rtable TableGenerator::generate(Mat gray) {
+    grayImage = gray;
+    
     rowCount = grayImage.rows;
     columnCount = grayImage.cols;
     edgeImage = detectEdges(grayImage);
-
     // for each edge point, record its angle relative to reference
     setReferencePoint();
     setXContour();
     setYContour();
-    buildRPoints();
-    
-//    inspect(dx);
-//    inspect(dy);
-    
-    // put into buckets
     intervals = 16;
     initRtable(intervals);
-    allotPoints();
+    buildRPoints();
+    
+    
+    // put into buckets
     
     inspectTable(table);
     // load points on vector

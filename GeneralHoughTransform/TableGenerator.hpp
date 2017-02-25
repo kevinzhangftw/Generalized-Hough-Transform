@@ -22,8 +22,8 @@ typedef std::vector<std::vector<Vec2i>> Rtable;
 typedef unsigned char uchar;
 
 struct Rpoint3{
-    uchar dx;
-    uchar dy;
+    int dx;
+    int dy;
     float phi;
 };
 
@@ -32,8 +32,8 @@ class TableGenerator {
     int columnCount;//= template_img.cols;
     int matType;
     Mat grayImage;
-    Mat detectEdges(Mat source);
     Mat edgeImage;
+    void normFloat(Mat &mat);
     void setReferencePoint();
     Vec2i referencePoint;
     Mat dx;
@@ -67,7 +67,9 @@ class TableGenerator {
     int rangeS;
     void debugPrint(Mat matrix);
 public:
+    Mat detectEdges(Mat source);
     void inspect(Mat image);
+    void inspectGray(Mat image);
     Rtable generate(Mat grayImage);
 };
 

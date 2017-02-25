@@ -12,6 +12,7 @@
 		2A3475CE1E5785A40046E81F /* ObjectDetection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A3475CC1E5785A40046E81F /* ObjectDetection.cpp */; };
 		2A3475D11E57916C0046E81F /* TableGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A3475CF1E57916C0046E81F /* TableGenerator.cpp */; };
 		2A3475E71E5EA8A40046E81F /* MatrixAccess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A3475E51E5EA8A40046E81F /* MatrixAccess.cpp */; };
+		2A3475EA1E61244E0046E81F /* VoteAccumulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2A3475E81E61244E0046E81F /* VoteAccumulator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +38,8 @@
 		2A3475D01E57916C0046E81F /* TableGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TableGenerator.hpp; sourceTree = "<group>"; };
 		2A3475E51E5EA8A40046E81F /* MatrixAccess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MatrixAccess.cpp; path = ../MatrixAccess.cpp; sourceTree = "<group>"; };
 		2A3475E61E5EA8A40046E81F /* MatrixAccess.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MatrixAccess.hpp; path = ../MatrixAccess.hpp; sourceTree = "<group>"; };
+		2A3475E81E61244E0046E81F /* VoteAccumulator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoteAccumulator.cpp; sourceTree = "<group>"; };
+		2A3475E91E61244E0046E81F /* VoteAccumulator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VoteAccumulator.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +77,8 @@
 				2A3475CD1E5785A40046E81F /* ObjectDetection.hpp */,
 				2A3475CF1E57916C0046E81F /* TableGenerator.cpp */,
 				2A3475D01E57916C0046E81F /* TableGenerator.hpp */,
+				2A3475E81E61244E0046E81F /* VoteAccumulator.cpp */,
+				2A3475E91E61244E0046E81F /* VoteAccumulator.hpp */,
 				2A2CD2EA1E4FEAD700F666B2 /* GHT.cpp */,
 				2A2CD2EB1E4FEAD700F666B2 /* GHT.hpp */,
 				2A3475E51E5EA8A40046E81F /* MatrixAccess.cpp */,
@@ -139,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A3475EA1E61244E0046E81F /* VoteAccumulator.cpp in Sources */,
 				2A3475CE1E5785A40046E81F /* ObjectDetection.cpp in Sources */,
 				2A2CD2E21E4EBB6600F666B2 /* main.cpp in Sources */,
 				2A3475E71E5EA8A40046E81F /* MatrixAccess.cpp in Sources */,

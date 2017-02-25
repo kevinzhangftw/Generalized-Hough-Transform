@@ -20,35 +20,19 @@ static Mat loadImage(const String& name)
 }
 
 Mat ObjectDetection::detect(String source, String object) {
-    Mat sourceMat;
-    if (source == "animals") {
-        sourceMat = loadImage("animals.jpg");
-    } else if (source == "letters") {
-        sourceMat = loadImage("letters.jpg");
-    } else if (source == "block") {
-        sourceMat = loadImage("block.tif");
-    }
-    Mat objectMat;
-    if (object == "bear") {
-        objectMat = imread("template_bear.png", 1);
-    } else if (object == "elephant") {
-        
-    } else if (object == "Q") {
-        
-    } else if (object == "K") {
-        
-    } else if (object == "block") {
-        objectMat = loadImage("block.tif");
-    }
+    
     
     Mat grayObject = grayScaleOf(object);
     TableGenerator tabler = TableGenerator();
+    Mat graySource = grayScaleOf(source);
+    medianBlur(graySource, graySource, 5);
+    Mat sourceEdge = tabler.detectEdges(graySource);
+    Mat sourcePhiMat = tabler.phiMat(graySource);
     Rtable rTable = tabler.generate(grayObject);
     //TODO:
     //     Rtable ghtModel = generateTable(objectEdges);
     //
 
-    tabler.inspect(sourceMat);
     /*
      
      Vec2i objectPosition = detectObject(bear, ghtModel);
@@ -70,9 +54,15 @@ Mat ObjectDetection::grayScaleOf(String object) {
     } else if (object == "Q") {
         
     } else if (object == "K") {
-        
+        objectMat = imread("template_K.png", 1);
     } else if (object == "block") {
         return loadImage("block.tif");
+    } else if (object == "animals") {
+        objectMat = imread("animals.jpg");
+    } else if (object == "blockelement") {
+        return loadImage("blockelement.png");
+    }else if (object == "blockscience") {
+        return loadImage("blockscience.png");
     }
     Mat tempMat;
     

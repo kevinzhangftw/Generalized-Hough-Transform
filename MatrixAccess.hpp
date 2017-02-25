@@ -24,7 +24,7 @@ using namespace std;
 class MatrixAccess {
     
 public:
-    void access(Mat, int, int);
+    float access(Mat, int, int);
     Mat copy(Mat);
     
 };

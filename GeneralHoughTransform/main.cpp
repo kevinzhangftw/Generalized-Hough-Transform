@@ -43,15 +43,15 @@ int main(int argc, const char * argv[]) {
 //    runGHT('t');
     
     //real thing
-//    ObjectDetection detector = ObjectDetection();
-//    Mat detectedBear = detector.detect("animals", "block");
+    ObjectDetection detector = ObjectDetection();
+    Mat detectedBear = detector.detect("blockscience", "blockelement");
 //    imshow("block", detectedBear);
 //    waitKey(0);
     //
-    MatrixAccess MatrixAccess;
-    Mat original = imread("template_bear.png", CV_RGB2GRAY);
-    Mat copyOfOriginal =  MatrixAccess.copy(original);
-    MatrixAccess.access(copyOfOriginal, 10, 10);
+//    MatrixAccess MatrixAccess;
+//    Mat original = imread("template_bear.png", CV_RGB2GRAY);
+//    Mat copyOfOriginal =  MatrixAccess.copy(original);
+//    MatrixAccess.access(original, 10, 10);
     
 //    Mat detectedElephant = detector.detect("animals", "elephant");
 //    Mat detectedK = detector.detect("letters", "K");

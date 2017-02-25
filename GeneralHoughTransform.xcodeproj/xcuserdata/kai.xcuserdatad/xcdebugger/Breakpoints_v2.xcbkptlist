@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GeneralHoughTransform/TableGenerator.cpp"
-            timestampString = "509519671.351838"
+            timestampString = "509679062.204908"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "TableGenerator::generate(Mat grayImage)"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
+            landmarkName = "TableGenerator::generate(Mat gray)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GeneralHoughTransform/TableGenerator.cpp"
-            timestampString = "509519671.351838"
+            timestampString = "509673615.322472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "TableGenerator::buildRPoints()"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "TableGenerator::inspectGray(Mat image)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,12 +58,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GeneralHoughTransform/TableGenerator.cpp"
-            timestampString = "509519671.351838"
+            timestampString = "509679062.204908"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "TableGenerator::buildRPoints()"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "TableGenerator::allotPoints()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
