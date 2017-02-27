@@ -20,12 +20,14 @@
 using namespace cv;
 
 class VoteAccumulator {
-    float maxScale = 1.1;
+    float minScale = 1;
+    float maxScale = 1.05;
     float scaleStep = 0.05;
-    int wiggleMin = 0; //angle delta in degrees
-    int wiggleMax = 180; //angle delta in degrees
+    int wiggleMin = -5; //angle delta in degrees
+    int wiggleMax = 15; //angle delta in degrees
     int intervals = 60;
- public:   
+    float threshold = 0.55 ;
+public:
     Mat accumulate(Mat edgeMat, Mat phiMat, Rtable table);
     
 

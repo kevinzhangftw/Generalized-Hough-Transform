@@ -45,9 +45,10 @@ int main(int argc, const char * argv[]) {
     //real thing
     ObjectDetection detector = ObjectDetection();
 //    Mat detectedBear = detector.detect("animals", "bear");
-    Mat detectedElephant = detector.detect("animals", "elephant");
+//    Mat detectedElephant = detector.detect("animals", "elephant");
 //    Mat detectedBlock = detector.detect("blockscience", "blockelement");
-//    Mat detectedLetter = detector.detect("letters", "Q");
+//        Mat detectedLetter = detector.detect("letters", "K");
+        Mat detectedLetter = detector.detect("letters", "Q");
     
     //    imshow("block", detectedBear);
 //    waitKey(0);

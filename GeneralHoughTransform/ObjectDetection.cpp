@@ -43,7 +43,7 @@ Mat ObjectDetection::detect(String source, String object) {
 //    inspect(grayObject);
 //    inspect(graySource);
 //    inspect(sourceEdge);
-//    inspect(sourcePhiMat);
+    inspect(sourcePhiMat);
     
     Rtable rTable = tabler.generate(grayObject);
     tabler.inspectTable(rTable);

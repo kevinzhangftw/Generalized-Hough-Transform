@@ -60,9 +60,9 @@ Mat VoteAccumulator::accumulate(Mat edgeMat, Mat phiMat, Rtable table) {
                 for (int wiggle = wiggleMin; wiggle <= wiggleMax; wiggle += divisor) {
                     int binOffset = wiggle / divisor;
                     int newBin = ( bin + binOffset + intervals ) % intervals;
-                    int scaleSteps = ( maxScale - 1 ) / scaleStep;
-                    for (int s = 0; s < scaleSteps; s++) {
-                        float scale = 1 + s * scaleStep;
+                    int scaleSteps = ( maxScale - minScale ) / scaleStep;
+                    for (int s = 0; s < maxScale; s++) {
+                        float scale = minScale + s * scaleStep;
                         for (int k = 0; k < table[newBin].size(); k++) {
                             int scaledDeltaY = cvRound((float)table[newBin][k](0) * scale);
                             int scaledDeltaX = cvRound((float)table[newBin][k](1) * scale);
@@ -77,9 +77,10 @@ Mat VoteAccumulator::accumulate(Mat edgeMat, Mat phiMat, Rtable table) {
             
         }
     }
-    blur(inspection, inspection, Size(11,11));
+    inspect(inspection);
+    blur(inspection, inspection, Size(7,7));
 //    medianBlur(inspection, inspection, 5);
-    highPass(inspection, inspection, 0.85);
+    highPass(inspection, inspection, threshold);
     inspect(inspection);
     
     
