@@ -25,29 +25,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GeneralHoughTransform/TableGenerator.cpp"
-            timestampString = "509679062.204908"
+            filePath = "GeneralHoughTransform/ObjectDetection.cpp"
+            timestampString = "509767830.471608"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "207"
-            endingLineNumber = "207"
-            landmarkName = "TableGenerator::generate(Mat gray)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "GeneralHoughTransform/TableGenerator.cpp"
-            timestampString = "509673615.322472"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "TableGenerator::inspectGray(Mat image)"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "ObjectDetection::detect(String source, String object)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -57,13 +41,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "GeneralHoughTransform/TableGenerator.cpp"
-            timestampString = "509679062.204908"
+            filePath = "GeneralHoughTransform/ObjectDetection.cpp"
+            timestampString = "509767830.471608"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
-            landmarkName = "TableGenerator::allotPoints()"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "ObjectDetection::detect(String source, String object)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

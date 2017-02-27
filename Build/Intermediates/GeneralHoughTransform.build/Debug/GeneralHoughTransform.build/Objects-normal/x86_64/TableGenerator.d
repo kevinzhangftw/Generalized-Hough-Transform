@@ -37,4 +37,6 @@ dependencies: \
   /usr/local/include/opencv2/videoio/videoio_c.h \
   /usr/local/include/opencv2/imgproc/imgproc.hpp \
   /usr/local/include/opencv2/imgproc.hpp \
-  /Users/kai/Desktop/GeneralHoughTransform/MatrixAccess.hpp
+  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/Rtable.hpp \
+  /Users/kai/Desktop/GeneralHoughTransform/MatrixAccess.hpp \
+  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/Inspector.hpp

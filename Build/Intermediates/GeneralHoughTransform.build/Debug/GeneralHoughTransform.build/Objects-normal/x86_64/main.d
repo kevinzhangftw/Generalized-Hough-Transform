@@ -39,4 +39,6 @@ dependencies: \
   /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/GHT.cpp \
   /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/ObjectDetection.hpp \
   /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/TableGenerator.hpp \
+  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/Rtable.hpp \
+  /Users/kai/Desktop/GeneralHoughTransform/GeneralHoughTransform/VoteAccumulator.hpp \
   /Users/kai/Desktop/GeneralHoughTransform/MatrixAccess.hpp
